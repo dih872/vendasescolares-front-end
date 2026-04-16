@@ -1,0 +1,14 @@
+:root {
+  --primary: #667eea;
+  --primary-dark: #764ba2;
+  --success: #4CAF50;
+  --danger: #f44336;
+  --warning: #ff9800;
+  --info: #2196F3;
+  --gray: #666;
+  --gray-light: #f5f7fa;
+  --white: #ffffff;
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+  --radius: 12px;
+}

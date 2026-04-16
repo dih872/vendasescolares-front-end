@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=DM+Sans:wght@400;500;600&display=swap');
+
+.header-admin {
+  background: var(--charcoal, #1a1a18);
+  color: var(--warm-white, #fffef9);
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.header-content {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  gap: 24px;
+}
+
+/* Logo */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  font-size: 22px;
+}
+
+.logo-text {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--warm-white, #fffef9);
+}
+
+/* Nav */
+.admin-nav {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.admin-nav a {
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+  letter-spacing: 0.01em;
+}
+
+.admin-nav a:hover {
+  color: var(--warm-white, #fffef9);
+  background: rgba(255,255,255,0.08);
+}
+
+.admin-nav a.active {
+  color: var(--warm-white, #fffef9);
+  background: rgba(255,255,255,0.1);
+}
+
+/* User */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+}
+
+.btn-sair {
+  padding: 7px 16px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+}
+
+.btn-sair:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--warm-white, #fffef9);
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .header-content {
+    height: 56px;
+    padding: 0;
+  }
+
+  .logo-text {
+    font-size: 16px;
+  }
+
+  .admin-nav {
+    gap: 2px;
+  }
+
+  .admin-nav a {
+    padding: 6px 10px;
+    font-size: 12.5px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .btn-sair {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .admin-nav a {
+    padding: 5px 7px;
+    font-size: 12px;
+  }
+}

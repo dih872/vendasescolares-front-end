@@ -1,0 +1,561 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+.dashboard-admin-moderno {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  background: var(--cream, #faf7f2);
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  animation: fadeUp 0.4s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-header h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  color: #1a1a18;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.welcome {
+  font-size: 14px;
+  color: #8a8578;
+  background: #fffef9;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid #d4c4a8;
+  font-weight: 500;
+}
+
+/* ── Stats ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: #fffef9;
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #ede8df;
+  box-shadow: 0 2px 20px rgba(26,26,24,0.07);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  animation: fadeUp 0.4s ease both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.05s; }
+.stat-card:nth-child(2) { animation-delay: 0.1s; }
+.stat-card:nth-child(3) { animation-delay: 0.15s; }
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(26,26,24,0.14);
+}
+
+.stat-icon { font-size: 36px; flex-shrink: 0; }
+
+.stat-info h3 {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8578;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a18;
+  letter-spacing: -0.02em;
+}
+
+.stat-card.lucro-total .stat-value { color: #5c6b3a; }
+.stat-card.vendas-hoje .stat-value  { color: #c9623f; }
+.stat-card.produtos .stat-value     { color: #1a1a18; }
+
+/* ── Panel base ── */
+.grafico-container,
+.resumo-vendas,
+.calculadora-lucro,
+.produtos-tabela {
+  background: #fffef9;
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid #ede8df;
+  box-shadow: 0 2px 20px rgba(26,26,24,0.07);
+}
+
+/* ── Chart ── */
+.grafico-container {
+  margin-bottom: 24px;
+}
+
+.grafico-container h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a18;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.grafico-header h3 {
+  font-size: 13px;
+  color: #8a8578;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+/* ── Two columns ── */
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.resumo-vendas h2,
+.calculadora-lucro h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a18;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+
+.resumo-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.resumo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #ede8df;
+}
+
+.resumo-item:last-child { border-bottom: none; }
+
+.resumo-item span {
+  font-size: 14px;
+  color: #8a8578;
+}
+
+.resumo-item strong {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a18;
+  letter-spacing: -0.01em;
+}
+
+/* ── Calculadora ── */
+.calculadora-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.input-group label {
+  font-size: 13.5px;
+  color: #8a8578;
+  white-space: nowrap;
+}
+
+.input-group input {
+  width: 130px;
+  padding: 9px 12px;
+  border: 1.5px solid #d4c4a8;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #1a1a18;
+  background: #faf7f2;
+  outline: none;
+  transition: border-color 0.18s ease;
+  text-align: right;
+}
+
+.input-group input:focus { border-color: #c9623f; }
+
+.resultado {
+  margin-top: 6px;
+  padding: 16px;
+  background: #faf7f2;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #d4c4a8;
+}
+
+.resultado span {
+  font-size: 13.5px;
+  color: #8a8578;
+}
+
+.resultado strong {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #5c6b3a;
+  letter-spacing: -0.02em;
+}
+
+/* ── Tabela ── */
+.produtos-tabela { margin-bottom: 0; }
+
+.produtos-tabela h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a18;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+.btn-adicionar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #5c6b3a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background 0.18s ease, transform 0.15s ease;
+}
+
+.btn-adicionar:hover {
+  background: #7a8f4e;
+  transform: translateY(-1px);
+}
+
+.produtos-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.produtos-table th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8578;
+  padding: 0 12px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ede8df;
+}
+
+.produtos-table td {
+  padding: 13px 12px;
+  font-size: 14px;
+  color: #1a1a18;
+  border-bottom: 1px solid #f3ede4;
+}
+
+.produtos-table tr:last-child td { border-bottom: none; }
+
+.ver-todos { text-align: center; padding: 16px !important; }
+
+.ver-todos a {
+  color: #c9623f;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  transition: color 0.18s ease;
+}
+
+.ver-todos a:hover { color: #e07a57; }
+
+/* ── Caixa do Dia ── */
+.caixa-container {
+  background: #fffef9;
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid #ede8df;
+  box-shadow: 0 2px 20px rgba(26,26,24,0.07);
+  margin-bottom: 24px;
+}
+
+.caixa-container h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a18;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+
+.caixa-totais-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.caixa-total-box {
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.caixa-total-box.receita { background: #eaf3de; border: 1px solid #c0dd97; }
+.caixa-total-box.despesa { background: #fdf3ee; border: 1px solid #f5c4b3; }
+.caixa-total-box.liquido { background: #1a1a18; border: 1px solid #1a1a18; }
+
+.caixa-total-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.caixa-total-box.receita .caixa-total-lbl { color: #3b6d11; }
+.caixa-total-box.despesa .caixa-total-lbl { color: #993c1d; }
+.caixa-total-box.liquido .caixa-total-lbl { color: rgba(255,255,255,0.45); }
+
+.caixa-total-val {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.caixa-total-box.receita .caixa-total-val { color: #3b6d11; }
+.caixa-total-box.despesa .caixa-total-val { color: #993c1d; }
+.caixa-total-box.liquido .caixa-total-val { color: #fffef9; }
+
+/* ── Abas ── */
+.caixa-abas {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.caixa-aba {
+  padding: 8px 18px;
+  border: 1.5px solid #5c6b3a;
+  border-radius: 100px;
+  background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5c6b3a;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.caixa-aba:hover {
+  background: #5c6b3a;
+  color: #fff;
+}
+
+.caixa-aba.active {
+  background: #5c6b3a;
+  border-color: #5c6b3a;
+  color: #fff;
+}
+
+.caixa-aba.despesa {
+  border-color: #c9623f;
+  color: #c9623f;
+}
+
+.caixa-aba.despesa:hover {
+  background: #c9623f;
+  color: #fff;
+}
+
+.caixa-aba.despesa.active {
+  background: #c9623f;
+  border-color: #c9623f;
+  color: #fff;
+}
+
+/* ── Input row ── */
+.caixa-input-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.caixa-input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1.5px solid #d4c4a8;
+  border-radius: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #1a1a18;
+  background: #faf7f2;
+  outline: none;
+  transition: border-color 0.18s ease;
+}
+
+.caixa-input:focus { border-color: #5c6b3a; box-shadow: 0 0 0 3px rgba(92,107,58,0.1); }
+.caixa-input.despesa:focus { border-color: #c9623f; box-shadow: 0 0 0 3px rgba(201,98,63,0.1); }
+
+/* ── Botão Adicionar ── */
+.caixa-btn-add {
+  padding: 11px 20px;
+  background: #5c6b3a;
+  color: #fff;
+  border: none;
+  border-radius: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.caixa-btn-add:hover { background: #7a8f4e; transform: translateY(-1px); }
+.caixa-btn-add.despesa { background: #c9623f; }
+.caixa-btn-add.despesa:hover { background: #e07a57; }
+
+/* ── Histórico ── */
+.caixa-historico {
+  background: #faf7f2;
+  border: 1px solid #ede8df;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.caixa-historico-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8578;
+  margin-bottom: 10px;
+}
+
+.caixa-historico-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ede8df;
+}
+
+.caixa-historico-item:last-child { border-bottom: none; }
+
+.caixa-hist-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+
+.caixa-hist-badge.receita { background: #eaf3de; color: #3b6d11; }
+.caixa-hist-badge.despesa { background: #fdf3ee; color: #993c1d; }
+
+.caixa-hist-hora { font-size: 12px; color: #8a8578; }
+
+.caixa-hist-valor { font-weight: 600; font-size: 14px; }
+.caixa-hist-valor.receita { color: #5c6b3a; }
+.caixa-hist-valor.despesa { color: #c0392b; }
+
+
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-card:nth-child(3) { grid-column: 1 / -1; }
+  .caixa-totais-grid { grid-template-columns: 1fr 1fr; }
+  .caixa-total-box.liquido { grid-column: 1 / -1; }
+}
+
+@media (max-width: 700px) {
+  .dashboard-admin-moderno { padding: 28px 16px 60px; }
+  .dashboard-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 28px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-card:nth-child(3) { grid-column: unset; }
+  .two-columns { grid-template-columns: 1fr; }
+  .grafico-container, .resumo-vendas, .calculadora-lucro, .produtos-tabela, .caixa-container { padding: 20px; }
+  .input-group input { width: 100px; }
+  .caixa-totais-grid { grid-template-columns: 1fr; }
+  .caixa-total-box.liquido { grid-column: unset; }
+  .caixa-input-row { flex-direction: column; }
+  .caixa-btn-add { width: 100%; text-align: center; }
+  .caixa-abas { flex-wrap: wrap; }
+}
+
+.grafico-vazio {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8a8578;
+  font-size: 14px;
+  background: #faf7f2;
+  border-radius: 12px;
+  border: 1.5px dashed #d4c4a8;
+}
+
+.grafico-legenda {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.grafico-leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #8a8578;
+  font-weight: 500;
+}
+
+.grafico-leg-sq {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+  flex-shrink: 0;
+}
