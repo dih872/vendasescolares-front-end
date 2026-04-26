@@ -10,8 +10,14 @@ export function ProdutoCard({ produto, onFeedbackAdicionado }) {
   const [comentario, setComentario] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [adicionado, setAdicionado] = useState(false);
+  const [toast, setToast] = useState(null);
   const { cliente } = useAuthCliente();
   const { adicionar } = useCart();
+
+  const mostrarToast = (tipo, mensagem) => {
+    setToast({ tipo, mensagem });
+    setTimeout(() => setToast(null), 3000);
+  };
 
   const handleAdicionar = () => {
     adicionar(produto);
@@ -21,7 +27,7 @@ export function ProdutoCard({ produto, onFeedbackAdicionado }) {
 
   const handleAvaliar = async () => {
     if (!cliente) {
-      alert('Você precisa fazer login para avaliar');
+      mostrarToast('erro', 'Você precisa fazer login para avaliar');
       return;
     }
     setEnviando(true);
@@ -35,9 +41,9 @@ export function ProdutoCard({ produto, onFeedbackAdicionado }) {
       setComentario('');
       setNota(5);
       if (onFeedbackAdicionado) onFeedbackAdicionado();
-      alert('Avaliação enviada com sucesso!');
+      mostrarToast('sucesso', `Obrigado pela avaliação, ${cliente.nome}! 🌟`);
     } catch (error) {
-      alert('Erro ao enviar avaliação');
+      mostrarToast('erro', 'Erro ao enviar avaliação. Tente novamente.');
     } finally {
       setEnviando(false);
     }
@@ -47,6 +53,16 @@ export function ProdutoCard({ produto, onFeedbackAdicionado }) {
 
   return (
     <div className="produto-card">
+
+      {toast && (
+        <div className={`produto-toast ${toast.tipo}`}>
+          <span className="produto-toast-ico">
+            {toast.tipo === 'sucesso' ? '✓' : '!'}
+          </span>
+          <span className="produto-toast-txt">{toast.mensagem}</span>
+        </div>
+      )}
+
       <img
         className="produto-img"
         src={produto.imagem || 'https://via.placeholder.com/400x200?text=Sem+imagem'}
