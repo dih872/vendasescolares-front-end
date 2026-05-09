@@ -17,7 +17,7 @@ export function HeaderCliente() {
     <header className="header-cliente">
       <div className="header-content">
         <div className="logo-area">
-          <span className="logo-icon">🍔</span>
+          <img src="/favicon.png" alt="Logo Cardápio Escolar" className="logo-icon" />
           <span className="logo-text">Sabor Conquista</span>
         </div>
         

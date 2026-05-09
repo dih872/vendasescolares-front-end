@@ -40,7 +40,11 @@
   margin-bottom: 52px;
 }
 
-.left-brand-ico { font-size: 20px; }
+.left-brand-ico {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
 
 .left-brand-name {
   font-family: 'Fraunces', serif;

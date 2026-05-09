@@ -36,7 +36,7 @@ export function LoginCliente() {
       <div className="login-left">
         <div className="left-top">
           <div className="left-brand">
-            <span className="left-brand-ico">🍔</span>
+            <img src="/favicon.png" alt="Logo Cardápio Escolar" className="left-brand-ico" />
             <span className="left-brand-name">Sabor Conquista</span>
           </div>
           <div className="left-headline">Ver o cardápio<br />é <em>fácil.</em></div>
