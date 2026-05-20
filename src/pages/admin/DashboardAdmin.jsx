@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useProdutos } from '../../hooks/useProdutos';
-import { useFeedbacks } from '../../hooks/useFeedbacks';
 import { HeaderAdmin } from '../../components/common/HeaderAdmin';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import api from '../../services/api';
 import './DashboardAdmin.css';
 
 export function DashboardAdmin() {
   const { user } = useAuth();
   const { todosProdutos } = useProdutos();
-  const { todosFeedbacks } = useFeedbacks();
 
   const [precoVenda, setPrecoVenda] = useState(6);
   const [custo, setCusto] = useState(3);
@@ -17,60 +16,70 @@ export function DashboardAdmin() {
 
   const [novoLancamento, setNovoLancamento] = useState('');
   const [novaDespesa, setNovaDespesa] = useState('');
-  const [totalReceitas, setTotalReceitas] = useState(() => {
-    const salvo = localStorage.getItem('caixa_receitas');
-    return salvo ? parseFloat(salvo) : 0;
-  });
-  const [totalDespesas, setTotalDespesas] = useState(() => {
-    const salvo = localStorage.getItem('caixa_despesas');
-    return salvo ? parseFloat(salvo) : 0;
-  });
-  const [historico, setHistorico] = useState(() => {
-    const salvo = localStorage.getItem('caixa_historico');
-    return salvo ? JSON.parse(salvo) : [];
-  });
+  const [totalReceitas, setTotalReceitas] = useState(0);
+  const [totalDespesas, setTotalDespesas] = useState(0);
+  const [historico, setHistorico] = useState([]);
   const [abaAtiva, setAbaAtiva] = useState('receita');
-
-  useEffect(() => {
-    localStorage.setItem('caixa_receitas', totalReceitas.toString());
-  }, [totalReceitas]);
-
-  useEffect(() => {
-    localStorage.setItem('caixa_despesas', totalDespesas.toString());
-  }, [totalDespesas]);
-
-  useEffect(() => {
-    localStorage.setItem('caixa_historico', JSON.stringify(historico));
-  }, [historico]);
+  const [carregando, setCarregando] = useState(true);
 
   const lucroLiquido = totalReceitas - totalDespesas;
 
-  const agora = () => new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-
-  const handleAdicionarReceita = () => {
-    const valor = parseFloat(novoLancamento.replace(',', '.'));
-    if (isNaN(valor) || valor <= 0) { alert('Informe um valor válido!'); return; }
-    setTotalReceitas(prev => prev + valor);
-    setHistorico(prev => [...prev, { tipo: 'receita', valor, hora: agora() }]);
-    setNovoLancamento('');
+  const carregarDados = async () => {
+    try {
+      const [totaisRes, historicoRes] = await Promise.all([
+        api.get('/admin/lancamentos/totais'),
+        api.get('/admin/lancamentos')
+      ]);
+      setTotalReceitas(Number(totaisRes.data.receitas));
+      setTotalDespesas(Number(totaisRes.data.despesas));
+      setHistorico(historicoRes.data);
+    } catch (error) {
+      console.error('Erro ao carregar lançamentos:', error);
+    } finally {
+      setCarregando(false);
+    }
   };
 
-  const handleAdicionarDespesa = () => {
+  useEffect(() => {
+    carregarDados();
+  }, []);
+
+  const agora = () => {
+    return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const handleAdicionarReceita = async () => {
+    const valor = parseFloat(novoLancamento.replace(',', '.'));
+    if (isNaN(valor) || valor <= 0) { alert('Informe um valor válido!'); return; }
+    try {
+      await api.post('/admin/lancamentos', { tipo: 'receita', valor });
+      setNovoLancamento('');
+      carregarDados();
+    } catch (error) {
+      alert('Erro ao adicionar receita');
+    }
+  };
+
+  const handleAdicionarDespesa = async () => {
     const valor = parseFloat(novaDespesa.replace(',', '.'));
     if (isNaN(valor) || valor <= 0) { alert('Informe um valor válido!'); return; }
-    setTotalDespesas(prev => prev + valor);
-    setHistorico(prev => [...prev, { tipo: 'despesa', valor, hora: agora() }]);
-    setNovaDespesa('');
+    try {
+      await api.post('/admin/lancamentos', { tipo: 'despesa', valor });
+      setNovaDespesa('');
+      carregarDados();
+    } catch (error) {
+      alert('Erro ao adicionar despesa');
+    }
   };
 
   const dadosGrafico = () => {
     if (historico.length === 0) return [];
     let recAcum = 0, desAcum = 0;
-    return historico.map((item) => {
-      if (item.tipo === 'receita') recAcum += item.valor;
-      else desAcum += item.valor;
+    return [...historico].reverse().map((item) => {
+      if (item.tipo === 'receita') recAcum += Number(item.valor);
+      else desAcum += Number(item.valor);
       return {
-        hora: item.hora,
+        hora: new Date(item.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
         Receitas: parseFloat(recAcum.toFixed(2)),
         Despesas: parseFloat(desAcum.toFixed(2)),
       };
@@ -116,9 +125,8 @@ export function DashboardAdmin() {
           </div>
         </div>
 
-        {/* Caixa */}
         <div className="caixa-container">
-          <h2>💵 Caixa do Dia</h2>
+          <h2>💵 Caixa</h2>
 
           <div className="caixa-totais-grid">
             <div className="caixa-total-box receita">
@@ -141,15 +149,11 @@ export function DashboardAdmin() {
             <button
               className={`caixa-aba ${abaAtiva === 'receita' ? 'active' : ''}`}
               onClick={() => setAbaAtiva('receita')}
-            >
-              + Receita
-            </button>
+            >+ Receita</button>
             <button
               className={`caixa-aba despesa ${abaAtiva === 'despesa' ? 'active' : ''}`}
               onClick={() => setAbaAtiva('despesa')}
-            >
-              - Despesa
-            </button>
+            >- Despesa</button>
           </div>
 
           {abaAtiva === 'receita' && (
@@ -186,17 +190,19 @@ export function DashboardAdmin() {
 
           {historico.length > 0 && (
             <div className="caixa-historico">
-              <div className="caixa-historico-title">Lançamentos de hoje</div>
-              {historico.slice().reverse().map((item, i) => (
-                <div key={i} className="caixa-historico-item">
+              <div className="caixa-historico-title">Histórico de lançamentos</div>
+              {historico.map((item) => (
+                <div key={item.id} className="caixa-historico-item">
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span className={`caixa-hist-badge ${item.tipo}`}>
                       {item.tipo === 'receita' ? 'Receita' : 'Despesa'}
                     </span>
-                    <span className="caixa-hist-hora">{item.hora}</span>
+                    <span className="caixa-hist-hora">
+                      {new Date(item.createdAt).toLocaleDateString('pt-BR')} {new Date(item.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                   </div>
                   <span className={`caixa-hist-valor ${item.tipo}`}>
-                    {item.tipo === 'receita' ? '+' : '-'} R$ {item.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    {item.tipo === 'receita' ? '+' : '-'} R$ {Number(item.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               ))}
@@ -204,13 +210,11 @@ export function DashboardAdmin() {
           )}
         </div>
 
-        {/* Gráfico */}
         <div className="grafico-container">
           <h2>📈 Evolução do Caixa</h2>
           <div className="grafico-header">
-            <h3>Lançamentos acumulados do dia</h3>
+            <h3>Lançamentos acumulados</h3>
           </div>
-
           {grafico.length === 0 ? (
             <div className="grafico-vazio">
               Nenhum lançamento ainda — adicione receitas ou despesas para ver o gráfico.
@@ -228,12 +232,7 @@ export function DashboardAdmin() {
                 />
                 <Tooltip
                   cursor={{ fill: 'rgba(26,26,24,0.04)' }}
-                  contentStyle={{
-                    background: '#1a1a18',
-                    border: 'none',
-                    borderRadius: 10,
-                    padding: '10px 14px',
-                  }}
+                  contentStyle={{ background: '#1a1a18', border: 'none', borderRadius: 10, padding: '10px 14px' }}
                   labelStyle={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}
                   itemStyle={{ color: '#fffef9', fontSize: 13 }}
                   formatter={(value) => `R$ ${value.toFixed(2)}`}
@@ -244,23 +243,19 @@ export function DashboardAdmin() {
               </BarChart>
             </ResponsiveContainer>
           )}
-
           <div className="grafico-legenda">
             <div className="grafico-leg-item">
-              <span className="grafico-leg-sq" style={{ background: '#5c6b3a' }}></span>
-              Receitas
+              <span className="grafico-leg-sq" style={{ background: '#5c6b3a' }}></span>Receitas
             </div>
             <div className="grafico-leg-item">
-              <span className="grafico-leg-sq" style={{ background: '#c9623f' }}></span>
-              Despesas
+              <span className="grafico-leg-sq" style={{ background: '#c9623f' }}></span>Despesas
             </div>
           </div>
         </div>
 
-        {/* Two columns */}
         <div className="two-columns">
           <div className="resumo-vendas">
-            <h2>📋 Resumo de Vendas</h2>
+            <h2>📋 Resumo</h2>
             <div className="resumo-stats">
               <div className="resumo-item">
                 <span>Lançamentos:</span>
@@ -284,7 +279,7 @@ export function DashboardAdmin() {
           </div>
 
           <div className="calculadora-lucro">
-            <h2>🧮 Calculadora de Lucro</h2>
+            <h2>🧮 Calculadora</h2>
             <div className="calculadora-form">
               <div className="input-group">
                 <label>Preço de Venda:</label>
@@ -306,7 +301,6 @@ export function DashboardAdmin() {
           </div>
         </div>
 
-        {/* Tabela */}
         <div className="produtos-tabela">
           <h2>📦 Gerenciar Produtos</h2>
           <button className="btn-adicionar" onClick={() => window.location.href = '/admin/produtos'}>
